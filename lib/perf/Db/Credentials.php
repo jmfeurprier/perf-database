@@ -67,19 +67,19 @@ class Credentials
         $this->driver = (string) $driver;
         $this->host   = (string) $host;
 
-        if (!is_null($username)) {
+        if (null !== $username) {
             $this->username = (string) $username;
         }
 
-        if (!is_null($password)) {
+        if (null !== $password) {
             $this->password = (string) $password;
         }
 
-        if (!is_null($database)) {
+        if (null !== $database) {
             $this->database = (string) $database;
         }
 
-        if (!is_null($charset)) {
+        if (null !== $charset) {
             $this->charset = (string) $charset;
         }
     }

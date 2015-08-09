@@ -203,7 +203,7 @@ class Connection
      */
     public function escapeAndQuote($value)
     {
-        if (is_null($value)) {
+        if (null === $value)) {
             $pdoType = \PDO::PARAM_NULL;
         } else {
             $pdoType = \PDO::PARAM_STR;
@@ -292,11 +292,11 @@ class Connection
 
         $this->pdo = $pdo;
 
-        if (!is_null($this->credentials->getCharset())) {
+        if (null !== $this->credentials->getCharset()) {
             $this->setCharset($this->credentials->getCharset());
         }
 
-        if (!is_null($this->credentials->getDatabase())) {
+        if (null !== $this->credentials->getDatabase()) {
             $this->selectDatabase($this->credentials->getDatabase());
         }
     }
