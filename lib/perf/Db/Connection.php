@@ -203,7 +203,7 @@ class Connection
      */
     public function escapeAndQuote($value)
     {
-        if (null === $value)) {
+        if (null === $value) {
             $pdoType = \PDO::PARAM_NULL;
         } else {
             $pdoType = \PDO::PARAM_STR;
