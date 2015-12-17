@@ -99,7 +99,7 @@ class Connection
     public function execute($sql, array $parameters = array())
     {
         if (count($parameters) > 0) {
-            $pdoStatement = $this->getPdo()->prepare($sql);
+            $pdoStatement = $this->pdoPrepare($sql);
             $pdoStatement->execute($parameters);
             $affectedRows = $pdoStatement->rowCount();
         } else {
@@ -119,7 +119,7 @@ class Connection
      */
     public function query($sql, array $parameters = null)
     {
-        $pdoStatement = $this->getPdo()->prepare($sql);
+        $pdoStatement = $this->pdoPrepare($sql);
         $pdoStatement->execute($parameters);
 
         return new QueryResult($pdoStatement);
@@ -129,12 +129,12 @@ class Connection
      * Prepares a SQL statement.
      *
      * @param string $sql
-     * @return Db_PreparedStatement
+     * @return PreparedStatement
      * @throws \RuntimeException
      */
     public function prepare($sql)
     {
-        $pdoStatement = $this->getPdo()->prepare($sql);
+        $pdoStatement = $this->pdoPrepare($sql);
 
         return new PreparedStatement($pdoStatement);
     }
@@ -149,10 +149,28 @@ class Connection
      */
     public function queryValue($sql, array $parameters = null)
     {
-        $pdoStatement = $this->getPdo()->prepare($sql);
+        $pdoStatement = $this->pdoPrepare($sql);
         $pdoStatement->execute($parameters);
 
         return $pdoStatement->fetchColumn(0);
+    }
+
+    /**
+     * Prepares a PDO statement.
+     *
+     * @param string $sql
+     * @return \PDOStatement
+     * @throws \RuntimeException
+     */
+    private function pdoPrepare($sql)
+    {
+        try {
+            $pdoStatement = $this->getPdo()->prepare($sql);
+        } catch (\PDOException $e) {
+            throw new \RuntimeException("Failed to prepare SQL query: {$sql} << {$e->getMessage()}", 0, $e);
+        }
+
+        return $pdoStatement;
     }
 
     /**
@@ -289,7 +307,6 @@ class Connection
         } catch (\PDOException $e) {
             throw new \RuntimeException('Failed to connect to database.', 0, $e);
         }
-
 
         $this->pdo = $pdo;
 
